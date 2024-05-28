@@ -1,4 +1,6 @@
 import React from 'react'
+import "../Style/Comman.css"
+
 
 const Contact = () => {
   return (

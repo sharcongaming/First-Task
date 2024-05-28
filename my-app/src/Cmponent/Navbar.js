@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../Context/AuthContext'
-// import "./Style/navbar.css"
+import "../Style/navbar.css"
 
 
 const Navbar = () => {
