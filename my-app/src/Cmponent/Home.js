@@ -1,6 +1,5 @@
 import React from 'react';
-import "../Style/navbar.css"
-import "../Style/Comman.css"
+
 import "../Style/style.css"
 
 
