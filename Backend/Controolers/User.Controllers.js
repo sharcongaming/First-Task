@@ -1,44 +1,45 @@
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../Modal/User.js";
+import UserModal from "../Modal/UserModal.js";
+
+
 
 export const Register = async (req, res) => {
   try {
-    const { name, email, password, number} = req.body;
-    if (!name || !email || !password || !number)
-      return res.json({
-        success: false,
-        message: "All Feilds are Mandatory!",
-      });
+      const { name, email, password, confirmPassword,  number} = req.body;
+    
+      if (!name || !email || !password || !confirmPassword || !number ) {
+          return res.send("All fields are required.")
+      }
 
-    const isEmailExist = await User.find({ email: email });
-    if (isEmailExist.length) {
-      return res.json({
-        success: false,
-        message: "Email already exists! Try a new one.",
-      });
-    }
+      if (password != confirmPassword) {
+          return res.send("Password and confirm password not matched.")
+      }
 
-    const hashPassW = await bcrypt.hash(password, 10);
+      const isEmailExist = await UserModal.find({ email: email })
 
-    const user = await User.create({
-      name,
-      email,
-      password: hashPassW,
-      number,
-    });
-    const newUser = await user.save()
+      if (isEmailExist.length) {
+          return res.send("Email is exist.")
+      }
 
-    return res.json({
-      success: true,
-      message: "User Registered Successfully!",
-      user:user
-    });
+      const hashedPassword = await bcrypt.hashSync(password, 10)
+       console.log(hashedPassword, password)
+
+      const user = new UserSchema({
+          name: name,
+          email: email,
+          number: number,
+          password: hashedPassword
+      })
+      await user.save()
+      return res.json({ message: 'User stored successfully.', success: true })
   } catch (error) {
-    return res.json({ success: false, message: error.message});
+      return res.status(500).json({ error }) 
   }
-};
+}
+
+
 
  
 export const Login = async (req, res) => {
@@ -50,7 +51,7 @@ export const Login = async (req, res) => {
         message: "All fields are mandtory..",
       });
 
-    const user = await User.findOne({ email: email });
+    const user = await UserModal.findOne({ email: email });
     if (!user)
       return res.json({ success : false, message: "User not found.." });
 

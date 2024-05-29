@@ -3,7 +3,8 @@ import dotenv from "dotenv"
 import cors from 'cors'
 import morgan from "morgan"
 import mongoose from "mongoose"
-import { Login, Register, getCurrentUser, getNumber } from "./controllers/User.Controllers.js"
+import { Login, Register, getCurrentUser, getNumber } from "./Controolers/User.Controllers.js"
+
 // const router = express.Router();
 const app = express();
 app.use(express.json());
@@ -13,7 +14,7 @@ dotenv.config();
 
 
 app.get("/",(req,res) => {
-  res.send("working  ......")
+  res.send("working  here  ......")
 })
 
 app.post("/register", Register)
@@ -23,17 +24,12 @@ app.get("get-number", getNumber )
 
 
 
-// const url = `mongodb+srv://sharcongaming:lonavla%40game@cluster0.vikvlva.mongodb.net/data`;
-
-
-mongoose.connect(url)
-    .then( () => {
-        console.log('Connected to database ')
+mongoose.connect("mongodb+srv://crewcoding61:samiksha123@cluster0.obnufg3.mongodb.net/data").then(() => {
+    console.log("Connected to DB...")
+  })
+      .catch( (err) => {
+        console.error(`Error connecting to the database:\n${err}`);
     })
-    .catch( (err) => {
-        console.error(`Error connecting to the database. \n${err}`);
-    })
-
-app.listen(8000, () =>{
+  app.listen(8000, () => {
     console.log("Listening on port 8000")
-})
+  })
