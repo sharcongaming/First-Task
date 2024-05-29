@@ -6,8 +6,8 @@ import { AuthContext } from '../Context/AuthContext';
 
 const Register = () => {
     const {state} =useContext(AuthContext)
-    const [userData, setUserData] = useState({ name: "", email: "", password: "", confirmPassword: "", role: "Buyer",number:""})
-    console.log(userData,"-userData")
+    const [userData, setUserData] = useState({ name: "", email: "", password: "", confirmPassword: "",number:""})
+    // console.log(userData,"-userData")
 
     
     const router = useNavigate()
@@ -15,14 +15,12 @@ const Register = () => {
     const handleChange = (event) => {
         setUserData({ ...userData,[event.target.name]: event.target.value })
     }
-    const handleChangeForSelect = (event) => {
-        setUserData({ ...userData,"role": event.target.value })
-    }
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         
-        if (userData.name && userData.email && userData.password && userData.confirmPassword && userData.role && userData.number) {
+        if (userData.name && userData.email && userData.password && userData.confirmPassword && userData.number) {
             if (userData.password === userData.confirmPassword){
 
 
@@ -30,7 +28,7 @@ const Register = () => {
                 const response = await axios.post(" http://localhost:8000/register", { userData });
                 if (response.data.success) {
 
-                    setUserData({ name: "", email: "", password: "", confirmPassword: "", role: "Buyer",number:"" })
+                    setUserData({ name: "", email: "", password: "", confirmPassword: "",number:"" })
                     router('/login')
                     toast.success(response.data.message)
                 } else {
@@ -44,7 +42,7 @@ const Register = () => {
             toast.error("All field are mandtory...")
         }
     }
-    console.log(userData, "userData")
+    // console.log(userData, "userData")
 
 
     useEffect(() => {
@@ -52,7 +50,7 @@ const Register = () => {
             router('/')
         }
     }, [state])
-
+    console.log(userData, "userData")
     return (
         <div className='body-first'>
             <h1>Register</h1>

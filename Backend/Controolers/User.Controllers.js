@@ -4,47 +4,51 @@ import jwt from "jsonwebtoken";
 import UserModal from "../Modal/UserModal.js";
 
 
-
 export const Register = async (req, res) => {
   try {
-      const { name, email, password, confirmPassword,  number} = req.body;
-    
-      if (!name || !email || !password || !confirmPassword || !number ) {
-          return res.send("All fields are required.")
-      }
+    const { userData } = req.body;
+    const { name, email, password, number,   confirmpassword} = req.body.userData;
+    if (!name || !email || !password || !number  ||   !confirmpassword)
+      return res.json({
+        success: false,
+        message: "All Feilds are Mandatory!",
+      });
 
-      if (password != confirmPassword) {
-          return res.send("Password and confirm password not matched.")
-      }
+    const isEmailExist = await UserModal.find({ email: email });
+    if (isEmailExist.length) {
+      return res.json({
+        success: false,
+        message: "Email already exists! Try a new one.",
+      });
+    }
 
-      const isEmailExist = await UserModal.find({ email: email })
+    const hashPassW = await bcrypt.hash(password, 10);
 
-      if (isEmailExist.length) {
-          return res.send("Email is exist.")
-      }
+    const user = new UserModal({
+      name:name,
+      email:email,
+      number:number,
+      password: hashPassW,
+      confirmpassword: confirmpassword,
+     
+    });
 
-      const hashedPassword = await bcrypt.hashSync(password, 10)
-       console.log(hashedPassword, password)
-
-      const user = new UserSchema({
-          name: name,
-          email: email,
-          number: number,
-          password: hashedPassword
-      })
-      await user.save()
-      return res.json({ message: 'User stored successfully.', success: true })
+    await user.save();
+    return res.json({
+      success: true,
+      message: "User Registered Successfully!",
+      user:user
+    });
   } catch (error) {
-      return res.status(500).json({ error }) 
+    return res.json({ success: false, message: error.message});
   }
-}
-
+};
 
 
  
 export const Login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body.userData;
     if (!email || !password)
       return res.json({
         success : false,

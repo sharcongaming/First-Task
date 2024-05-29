@@ -1,28 +1,31 @@
 
-import Mongoose ,{Schema } from "mongoose";
+
+import mongoose, { Schema } from "mongoose";
+
 const userSchema = new Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    email:{
+    email: {
         type: String,
         required: true
     },
-    password:{
+    password: {
         type: String,
         required: true
     },
-    number:{
+        number:{
         type: Number,
         required: true
     },
-    confirmPassword:{
+    confirmpassword:{
         type: String,
-        required: true
-
+        required: true 
     }
 
 })
+export default mongoose.model("User", userSchema)
 
-export default Mongoose.model("User",userSchema);
+
+// 103.216.68.225/32
